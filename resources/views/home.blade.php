@@ -17,7 +17,7 @@
                                     </a>
                                     <p>{{$course->description}}</p>
                                     <p>{{$course->price}}</p>
-                                    <a href="" class="btn btn-sm btn-primary">Add to cart</a>
+                                    <a href="{{route('addToCart',$course)}}" class="btn btn-sm btn-primary">Add to cart</a>
                                 </div>
                             </div>
                         @endforeach

@@ -2,6 +2,7 @@
 
 use App\Models\Course;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileController;
 
@@ -12,6 +13,13 @@ Route::get('/', function () {
 
 Route::controller(CourseController::class)->group(function () {
     Route::get('/courses/{course:slug}', 'show')->name('courses.show');
+});
+
+// Cart Management
+
+Route::controller(CartController::class)->group(function(){
+    Route::get('/cart', 'index')->name('cart.index');
+    Route::get('/addToCart/{course:slug}', 'addToCart')->name('addToCart');
 });
 
 Route::get('/dashboard', function () {

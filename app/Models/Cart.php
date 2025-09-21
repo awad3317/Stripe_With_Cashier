@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Course extends Model
+class Cart extends Model
 {
     /**
      * The attributes that aren't mass assignable.
@@ -13,8 +13,8 @@ class Course extends Model
      */
     protected $guarded = [];
 
-    public function carts()
+    public function courses()
     {
-        return $this->belongsToMany(Cart::class, 'cart_course');
+        return $this->belongsToMany(Course::class, 'cart_course');
     }
 }
