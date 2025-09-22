@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Cart;
 use App\Models\Course;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
@@ -7,8 +8,9 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
+    $cart = Cart::where('session_id',session()->getId())->first();
     $courses = Course::all();
-    return view('home',compact('courses'));
+    return view('home',get_defined_vars());
 })->name('home');
 
 Route::controller(CourseController::class)->group(function () {
