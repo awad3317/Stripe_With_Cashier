@@ -16,9 +16,9 @@
                                         <h5>{{$course->name}}</h5>
                                     </a>
                                     <p>{{$course->description}}</p>
-                                    <p>{{$course->price}}</p>
+                                    <p>{{$course->price()}}</p>
                                     @if ($cart && $cart->courses->contains($course))
-                                        <a href="" class="btn btn-sm btn-danger">Remove From cart</a>
+                                        <a href="{{route('removeFromCart', $course)}}" class="btn btn-sm btn-danger">Remove From cart</a>
                                     @else
                                         <a href="{{route('addToCart',$course)}}" class="btn btn-sm btn-primary">Add to cart</a>    
                                     @endif

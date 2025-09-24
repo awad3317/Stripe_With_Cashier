@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Laravel\Cashier\Cashier;
 use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
@@ -16,5 +17,10 @@ class Course extends Model
     public function carts()
     {
         return $this->belongsToMany(Cart::class, 'cart_course');
+    }
+
+    public function price()
+    {
+        return Cashier::formatAmount($this->price);
     }
 }

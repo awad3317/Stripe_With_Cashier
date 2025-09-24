@@ -8,7 +8,6 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
-    $cart = Cart::where('session_id',session()->getId())->first();
     $courses = Course::all();
     return view('home',get_defined_vars());
 })->name('home');
@@ -22,6 +21,7 @@ Route::controller(CourseController::class)->group(function () {
 Route::controller(CartController::class)->group(function(){
     Route::get('/cart', 'index')->name('cart.index');
     Route::get('/addToCart/{course:slug}', 'addToCart')->name('addToCart');
+    Route::get('/removeFromCart/{course:slug}', 'removeFromCart')->name('removeFromCart');
 });
 
 Route::get('/dashboard', function () {

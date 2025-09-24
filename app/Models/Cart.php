@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Laravel\Cashier\Cashier;
 use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
@@ -13,8 +14,14 @@ class Cart extends Model
      */
     protected $guarded = [];
 
+    protected $with = ['courses'];
+
     public function courses()
     {
         return $this->belongsToMany(Course::class, 'cart_course');
+    }
+
+    public function total(){
+        return Cashier::formatAmount($this->courses->sum('price'));
     }
 }

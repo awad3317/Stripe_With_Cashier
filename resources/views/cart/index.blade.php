@@ -13,11 +13,17 @@
                         @foreach ($cart->courses as $course)
                             <div class="bg-light mb-3 p-2 d-flex justify-content-between align-items-center">
                                 <h6>{{$course->name}}
-                                    <small class="text-primary">({{$course->price}})</small>
+                                    <small class="text-primary">({{$course->price()}})</small>
                                 </h6>
-                                <a href="" class="btn btn-sm btn-danger">Remove</a>
+                                <a href="{{route('removeFromCart', $course)}}" class="btn btn-sm btn-danger">Remove</a>
                             </div>
                         @endforeach
+                        <div class="bg-light mb-3 p-2 d-flex justify-content-between align-items-center">
+                                <h6>total
+                                    <small class="text-primary">({{$cart->total()}})</small>
+                                </h6>
+                                <a href="" class="btn btn-sm btn-success">Checkout</a>
+                            </div>
                     @else
                         <div class="alert alert-info">Your Cart Is Empty</div>
                     @endif
