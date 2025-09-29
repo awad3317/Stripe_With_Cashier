@@ -7,6 +7,14 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 row">
+            @if (request()->get('success') !== null)
+                @if (request()->get('success'))
+                    <div class="alert alert-success">Payment Successful</div>
+                @else
+                    <div class="alert alert-danger">Payment Cancelled</div>
+                @endif
+                
+            @endif
             
                     @if (count($courses) > 0)
                         @foreach ($courses as $course)
