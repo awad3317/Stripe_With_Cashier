@@ -4,8 +4,10 @@ use App\Models\Cart;
 use App\Models\Course;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileController;
+use Laravel\Cashier\Checkout;
 
 Route::get('/', function () {
     $courses = Course::all();
@@ -22,6 +24,13 @@ Route::controller(CartController::class)->group(function(){
     Route::get('/cart', 'index')->name('cart.index');
     Route::get('/addToCart/{course:slug}', 'addToCart')->name('addToCart');
     Route::get('/removeFromCart/{course:slug}', 'removeFromCart')->name('removeFromCart');
+});
+
+// Checkout Management
+
+Route::controller(CheckoutController::class)->group(function(){
+    Route::get('/checkout', 'checkout')->name('checkout')->middleware('auth');
+    Route::post('/checkout', 'process')->name('checkout.process');
 });
 
 Route::get('/dashboard', function () {
