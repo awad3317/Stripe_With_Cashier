@@ -14,12 +14,17 @@ class CheckoutController extends Controller
         $sessionOptions = [
             'success_url' => route('home', ['success' => true]),
             'cancel_url' => route('home', ['success' => false]),
-            "phone_number_collection"=> [
-                "enabled"=> true
-            ],
+           "metadata" =>[
+            "cart_id" => $cart->id
+           ]
+        ];
+        $customerOptions = [
+            "metadata" =>[
+                "mycod" => 123456789,
+            ]
         ];
         // dd(Auth::user()->checkout($price, $sessionOptions));
-        return Auth::user()->checkout($price, $sessionOptions);
+        return Auth::user()->checkout($price, $sessionOptions, $customerOptions);
        
     }
 }
