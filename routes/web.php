@@ -30,7 +30,8 @@ Route::controller(CartController::class)->group(function(){
 
 Route::controller(CheckoutController::class)->group(function(){
     Route::get('/checkout', 'checkout')->name('checkout')->middleware('auth');
-    Route::post('/checkout', 'process')->name('checkout.process');
+    Route::get('/checkout/success', 'success')->name('checkout.success')->middleware('auth');
+    Route::get('/checkout/cancel', 'cancel')->name('checkout.cancel')->middleware('auth');
 });
 
 Route::get('/dashboard', function () {
