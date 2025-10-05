@@ -23,4 +23,8 @@ class Course extends Model
     {
         return Cashier::formatAmount($this->price);
     }
+
+    public function orders(){
+        return $this->belongsToMany(order::class, 'course_order');
+    }
 }

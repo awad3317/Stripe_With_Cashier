@@ -15,6 +15,7 @@ class CartController extends Controller
     function addToCart(Course $course){
         $cart = Cart::firstOrCreate([
             'session_id' => session()->getId(),
+            'user_id' => auth()->user()->id ?? null,
         ]);
         $cart->courses()->syncWithoutDetaching($course);
         return back();
