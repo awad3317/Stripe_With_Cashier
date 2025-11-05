@@ -31,7 +31,7 @@ class CheckoutController extends Controller
        
     }
 
-     public function enableCoupons(){
+    public function enableCoupons(){
         $cart = Cart::where('session_id', request()->session()->getId())->first();
         $price = $cart->courses->pluck('stripe_price_id')->toArray();
         $sessionOptions = [
@@ -45,6 +45,52 @@ class CheckoutController extends Controller
         // ->withPromotionCode('promo_1SFCtTGnl6rxKSPsuwENeuxI')
         // ->withCoupon('eYDCmBbU')
         ->checkout($price, $sessionOptions);
+       
+    }
+
+    public function nonStripeProducts(){
+        $cart = Cart::where('session_id', request()->session()->getId())->first();
+        $amount = $cart->courses->sum('price');
+
+        $sessionOptions = [
+            'success_url' => route('home', ['message' => 'Payment Successful!']),
+            'cancel_url' => route('home', ['message' => 'Payment Cancelled!']),
+            
+        ];
+        
+        return Auth::user()->checkoutCharge($amount, 'courses bundles', 1, $sessionOptions);
+       
+    }
+
+    public function lineItems(){
+        $cart = Cart::where('session_id', request()->session()->getId())->first();
+        $courses = $cart->courses->map(function($course){
+            return [
+                'price_data' => [
+                    'currency' => env('CASHIER_CURRENCY','usd'),
+                    'product_data' => [
+                        'name' => $course->name
+                    ],
+                    'unit_amount' => $course->price,
+                    // 'tax_behavior' => 'exclusive',
+                ],
+                // 'adjustable_quantity' => [
+                //     'enabled' => true,
+                //     'minimum' => 1,
+                //     'maximum' => 10,
+                // ],
+                'quantity' => 1,
+            ];
+        })->toArray();
+
+        $sessionOptions = [
+            'success_url' => route('home', ['message' => 'Payment Successful!']),
+            'cancel_url' => route('home', ['message' => 'Payment Cancelled!']),
+            'line_items' => $courses
+            
+        ];
+        
+        return Auth::user()->checkout(null, $sessionOptions);
        
     }
 

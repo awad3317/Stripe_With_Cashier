@@ -18,7 +18,7 @@
             
                     @if (count($courses) > 0)
                         @foreach ($courses as $course)
-                            <div class="card col-4">
+                            <div class="card col-4 mb-3">
                                 <div class="p-6 text-gray-900">
                                     <a href="{{route('courses.show',$course)}}">
                                         <h5>{{$course->name}}</h5>
