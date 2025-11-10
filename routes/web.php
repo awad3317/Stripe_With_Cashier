@@ -33,6 +33,7 @@ Route::controller(CheckoutController::class)->group(function(){
     Route::get('/checkout/enableCoupons', 'enableCoupons')->name('checkout.enableCoupons')->middleware('auth');
     Route::get('/checkout/nonStripeProduct', 'nonStripeProduct')->name('checkout.nonStripeProduct')->middleware('auth');
     Route::get('/checkout/lineItems', 'lineItems')->name('checkout.lineItems')->middleware('auth');
+    Route::get('/checkout/guest', 'guest')->name('checkout.guest');
     Route::get('/checkout/success', 'success')->name('checkout.success')->middleware('auth');
     Route::get('/checkout/cancel', 'cancel')->name('checkout.cancel')->middleware('auth');
 });

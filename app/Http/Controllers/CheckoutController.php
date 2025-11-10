@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Cashier\Checkout;
 
 class CheckoutController extends Controller
 {
@@ -74,11 +75,11 @@ class CheckoutController extends Controller
                     'unit_amount' => $course->price,
                     // 'tax_behavior' => 'exclusive',
                 ],
-                // 'adjustable_quantity' => [
-                //     'enabled' => true,
-                //     'minimum' => 1,
-                //     'maximum' => 10,
-                // ],
+                'adjustable_quantity' => [
+                    'enabled' => true,
+                    'minimum' => 1,
+                    'maximum' => 10,
+                ],
                 'quantity' => 1,
             ];
         })->toArray();
@@ -91,6 +92,38 @@ class CheckoutController extends Controller
         ];
         
         return Auth::user()->checkout(null, $sessionOptions);
+       
+    }
+
+    public function guest(){
+        $cart = Cart::where('session_id', request()->session()->getId())->first();
+        $courses = $cart->courses->map(function($course){
+            return [
+                'price_data' => [
+                    'currency' => env('CASHIER_CURRENCY','usd'),
+                    'product_data' => [
+                        'name' => $course->name
+                    ],
+                    'unit_amount' => $course->price,
+                    // 'tax_behavior' => 'exclusive',
+                ],
+                'adjustable_quantity' => [
+                    'enabled' => true,
+                    'minimum' => 1,
+                    'maximum' => 10,
+                ],
+                'quantity' => 1,
+            ];
+        })->toArray();
+
+        $sessionOptions = [
+            'success_url' => route('home', ['message' => 'Payment Successful!']),
+            'cancel_url' => route('home', ['message' => 'Payment Cancelled!']),
+            'line_items' => $courses
+            
+        ];
+        
+        return Checkout::guest()->create(null,$sessionOptions);
        
     }
 
