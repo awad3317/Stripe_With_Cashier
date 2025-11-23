@@ -22,7 +22,7 @@
                                 <h6>total
                                     <small class="text-primary">({{$cart->total()}})</small>
                                 </h6>
-                                <a href="{{route("checkout.guest")}}" class="btn btn-sm btn-success">Checkout</a>
+                                <a href="{{route("direct.paymentMethod")}}" class="btn btn-sm btn-success">Checkout</a>
                             </div>
                     @else
                         <div class="alert alert-info">Your Cart Is Empty</div>

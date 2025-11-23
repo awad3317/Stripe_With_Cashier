@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\PaymentMethodCheckoutController;
 use App\Http\Controllers\ProfileController;
 use Laravel\Cashier\Checkout;
 
@@ -38,6 +39,11 @@ Route::controller(CheckoutController::class)->group(function(){
     Route::get('/checkout/cancel', 'cancel')->name('checkout.cancel')->middleware('auth');
 });
 
+// Direct Integration - Payment Method 
+Route::controller(PaymentMethodCheckoutController::class)->group(function(){
+    Route::get('/direct/paymentMethod', 'index')->name('direct.paymentMethod')->middleware('auth');
+    
+});
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
