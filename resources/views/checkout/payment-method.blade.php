@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form action="{{ route('direct.paymentMethod.post') }}" method="POST">
+                    <form action="{{ route('direct.paymentMethod.post') }}" method="POST" id="form">
                         @csrf
                         <input type="hidden" name="payment_method" id="payment_method">
                         <!-- Stripe Elements Placeholder -->
@@ -44,6 +44,7 @@
                 alert('Payment Method Created Successfully!');
                 console.log(paymentMethod);
                 document.getElementById('payment_method').value = paymentMethod.id;
+                document.getElementById('form').submit();
             }
         });
     </script>
