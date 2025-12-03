@@ -9,13 +9,13 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form action="post">
+                    <form action="{{ route('direct.paymentMethod.post') }}" method="POST">
                         @csrf
-
+                        <input type="hidden" name="payment_method" id="payment_method">
                         <!-- Stripe Elements Placeholder -->
                         <div id="card-element"></div>
 
-                        <button id="card-button" class="btn btn-sm btn-primary mt-3">
+                        <button id="card-button" class="btn btn-sm btn-primary mt-3" type="button">
                             Process Payment
                         </button>
                     </form>
@@ -24,11 +24,27 @@
         </div>
     </div>
     <script>
-        const stripe = Stripe('pk_test_51SCgxTGnl6rxKSPsSB7pGwOIe0vcne1zO6ChlP5L6lW4JRfNcLCwP0nKvGbUyr31RNk9jdObHgcv93d779g2RfTS00C6EZ40sb');
 
+        // Initialize Stripe
+        const stripe = Stripe(@json(env('STRIPE_KEY')));
         const elements = stripe.elements();
         const cardElement = elements.create('card');
-
         cardElement.mount('#card-element');
+
+        // Handle Payment Method 
+        document.getElementById('card-button').addEventListener('click', async (e) => {
+            const { paymentMethod, error } = await stripe.createPaymentMethod(
+                'card', cardElement
+            );
+
+            if (error) {
+                alert('error');
+                console.log(error);
+            } else {
+                alert('Payment Method Created Successfully!');
+                console.log(paymentMethod);
+                document.getElementById('payment_method').value = paymentMethod.id;
+            }
+        });
     </script>
 </x-app-layout>
