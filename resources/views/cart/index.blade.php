@@ -22,6 +22,9 @@
                                 <h6>total
                                     <small class="text-primary">({{$cart->total()}})</small>
                                 </h6>
+                                @if (Auth::user()->hasDefaultPaymentMethod())
+                                    <a href="{{route("direct.paymentMethod.oneClick")}}" class="btn btn-sm btn-info">One Click Checkout</a>
+                                @endif
                                 <a href="{{route("direct.paymentMethod")}}" class="btn btn-sm btn-success">Checkout</a>
                             </div>
                     @else

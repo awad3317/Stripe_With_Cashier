@@ -42,8 +42,9 @@ Route::controller(CheckoutController::class)->group(function(){
 // Direct Integration - Payment Method 
 Route::controller(PaymentMethodCheckoutController::class)->group(function(){
     Route::get('/direct/paymentMethod', 'index')->name('direct.paymentMethod')->middleware('auth');
-    Route::post('/direct/paymentMethod/post', 'post')->name('direct.paymentMethod.post')->middleware('auth');
     
+    Route::post('/direct/paymentMethod/post', 'post')->name('direct.paymentMethod.post')->middleware('auth');
+    Route::get('/direct/paymentMethod/oneClick', 'oneClick')->name('direct.paymentMethod.oneClick')->middleware(['auth','ProtectOneClickCheckout']);
 });
 Route::get('/dashboard', function () {
     return view('dashboard');

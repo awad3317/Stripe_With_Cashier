@@ -16,6 +16,12 @@ class PaymentMethodCheckoutController extends Controller
 
     public function post(Request $request)
     {
+        if($request->payment_method){
+            Auth::user()->updateOrCreateStripeCustomer();
+            // Auth::user()->addPaymentMethod($request->payment_method);
+            Auth::user()->updateDefaultPaymentMethod($request->payment_method);
+            
+        }
         $cart=Cart::where('session_id', request()->session()->getId())->first();
         $amount= $cart->courses->sum('price');
         $paymentMethod=$request->payment_method;
@@ -26,9 +32,30 @@ class PaymentMethodCheckoutController extends Controller
                 'user_id'=>Auth::user()->id,
             ]);
             $courseIds = $cart->courses->pluck('id')->toArray();
-$order->courses()->attach($courseIds);
-$cart->delete();
+            $order->courses()->attach($courseIds);
+            $cart->delete();
             return redirect()->route('home');
         }
+    }
+
+    public function oneClick(Request $request) {
+        if(Auth::user()->hasDefaultPaymentMethod()){
+            $cart=Cart::where('session_id', request()->session()->getId())->first();
+            $amount= $cart->courses->sum('price');
+            $paymentMethod=Auth::user()->defaultPaymentMethod()->id;
+            $payment=Auth::user()->charge($amount,$paymentMethod,[
+                'return_url'=>route('home'),        ]); 
+            if($payment->status == "succeeded"){
+                $order= order::create([
+                    'user_id'=>Auth::user()->id,
+                ]);
+                $courseIds = $cart->courses->pluck('id')->toArray();
+                $order->courses()->attach($courseIds);
+                $cart->delete();
+                return redirect()->route('home');
+            }
+        
+        }
+        
     }
 }
