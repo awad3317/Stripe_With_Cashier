@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\PaymentIntentController;
 use App\Http\Controllers\PaymentMethodCheckoutController;
 use App\Http\Controllers\ProfileController;
 use Laravel\Cashier\Checkout;
@@ -46,6 +47,16 @@ Route::controller(PaymentMethodCheckoutController::class)->group(function(){
     Route::post('/direct/paymentMethod/post', 'post')->name('direct.paymentMethod.post')->middleware('auth');
     Route::get('/direct/paymentMethod/oneClick', 'oneClick')->name('direct.paymentMethod.oneClick')->middleware(['auth','ProtectOneClickCheckout']);
 });
+
+
+// Direct Integration - Payment Intent
+Route::controller(PaymentIntentController::class)->group(function(){
+    Route::get('/direct/paymentIntent', 'index')->name('direct.paymentIntent')->middleware('auth');
+    
+    Route::post('/direct/paymentIntent/post', 'post')->name('direct.paymentIntent.post')->middleware('auth');
+});
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
