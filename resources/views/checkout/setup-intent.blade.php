@@ -11,12 +11,12 @@
                 <div class="p-6 text-gray-900">
                     <form action="{{ route('direct.setupIntent.post') }}" method="POST" id="form">
                         @csrf
-                        <input type="hidden" name="setup_intent_id" id="payment_intent_id">
+                        <input type="hidden" name="payment_method_id" id="payment_method_id">
                         <!-- Stripe Elements Placeholder -->
                         <div id="card-element"></div>
 
                         <button id="card-button" class="btn btn-sm btn-primary mt-3"
-                            data-secret="{{ $payment->client_secret }}" type="button">
+                            data-secret="{{ $setupIntent->client_secret }}" type="button">
                             Process Payment
                         </button>
                     </form>
@@ -36,7 +36,7 @@
         const cardButton = document.getElementById('card-button');
         const clientSecret = cardButton.dataset.secret;
         cardButton.addEventListener('click', async (e) => {
-            const { paymentIntent, error } = await stripe.confirmCardPayment(
+            const { setupIntent, error } = await stripe.confirmCardSetup(
                 clientSecret, {
                 payment_method: {
                     card: cardElement,
@@ -49,8 +49,8 @@
                 console.log(error);
             } else {
                 alert('Payment Method Created Successfully!');
-                console.log(paymentIntent);
-                document.getElementById('payment_intent_id').value = paymentIntent.id;
+                console.log(setupIntent);
+                document.getElementById('payment_method_id').value = setupIntent.payment_method;
                 document.getElementById('form').submit();
             }
         });

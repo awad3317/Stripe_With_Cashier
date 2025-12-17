@@ -25,7 +25,7 @@
                                 @if (Auth::user()->hasDefaultPaymentMethod())
                                     <a href="{{route("direct.paymentMethod.oneClick")}}" class="btn btn-sm btn-info">One Click Checkout</a>
                                 @endif
-                                <a href="{{route("direct.paymentIntent")}}" class="btn btn-sm btn-success">Checkout</a>
+                                <a href="{{route("direct.setupIntent")}}" class="btn btn-sm btn-success">Checkout</a>
                             </div>
                     @else
                         <div class="alert alert-info">Your Cart Is Empty</div>

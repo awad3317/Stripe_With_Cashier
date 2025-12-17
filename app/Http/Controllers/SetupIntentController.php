@@ -2,22 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SetupIntentController extends Controller
 {
     public function index()  {
-        $amount=Cart::where('session_id', request()->session()->getId())->first()->courses->sum('price');
-        $payment=Auth::user()->pay($amount);
-        return view('checkout.payment-intent',compact('payment'));
+        
+        $setupIntent=Auth::user()->createSetupIntent();
+        // dd($setupIntent);
+        return view('checkout.setup-intent',get_defined_vars());
     }
     
     public function post(Request $request)  {
          
-            $cart=Cart::where('session_id', request()->session()->getId())->first(); 
-            $paymentIntentId=$request->payment_intent_id;
-            $paymentIntent=Auth::user()->findPayment($paymentIntentId);
-            if($paymentIntent->status == "succeeded"){
+            $cart=Cart::where('session_id', request()->session()->getId())->first();
+            $amount= $cart->courses->sum('price');
+            $paymentMethod=$request->payment_method_id;
+            Auth::user()->createOrGetStripeCustomer();
+            $payment=Auth::user()->charge($amount,$paymentMethod,[
+                'return_url'=>route('home'),        ]); 
+            if($payment->status == "succeeded"){
                 $order= order::create([
                     'user_id'=>Auth::user()->id,
                 ]);
